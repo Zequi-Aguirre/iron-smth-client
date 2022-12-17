@@ -10,6 +10,7 @@ export default function Nav() {
 
   return (
     <div>
+      {/* remove ! */}
       {!theUser && (
         <div id="nav-bar">
           <Link to="/">GO HOME!!</Link>
@@ -40,6 +41,14 @@ export default function Nav() {
                 <Link to="/login">Login</Link>
               </li>
             )}
+
+            {/* comment this out */}
+            {!theUser && (
+              <li>
+                <Link to="/signup">Sign up</Link>
+              </li>
+            )}
+            {/* comment this out */}
 
             {theUser && (
               <li>
