@@ -10,7 +10,7 @@ export default function Nav() {
 
   return (
     <div>
-      {theUser && (
+      {!theUser && (
         <div id="nav-bar">
           <Link to="/">GO HOME!!</Link>
 
