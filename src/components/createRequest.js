@@ -37,6 +37,26 @@ export default function CreateRequest() {
     );
   });
 
+  let userSelectorDefault = () => {
+    if (formState.assignedTo === "") {
+      return (
+        <option value="" selected>
+          Select Person
+        </option>
+      );
+    }
+  };
+
+  let propertySelectorDefault = () => {
+    if (formState.property === "") {
+      return (
+        <option value="" key="selectProperty" selected>
+          Select Property
+        </option>
+      );
+    }
+  };
+
   let userSelector = users.map((user) => {
     return (
       <option value={user._id} key={user._id}>
@@ -69,9 +89,8 @@ export default function CreateRequest() {
             updateInput(e, "property");
           }}
         >
-          <option value="" key="selectProperty">
-            Select Property
-          </option>
+          {propertySelectorDefault()}
+
           {propertiesSelector}
         </select>
       </div>
@@ -106,7 +125,7 @@ export default function CreateRequest() {
             updateInput(e, "assignedTo");
           }}
         >
-          <option value="">Select Person</option>
+          {userSelectorDefault()}
           {userSelector}
         </select>
       </div>
@@ -115,6 +134,14 @@ export default function CreateRequest() {
         disabled={!formValid}
         onClick={() => {
           sendRequestInfo(formState);
+
+          setFormState({
+            property: "",
+            description: "",
+            dueDate: "",
+            assignedTo: "",
+          });
+
           // fetchRequests();
 
           // navigate("/properties");

@@ -2,7 +2,11 @@ import React, { useContext, useEffect } from "react";
 import UserContext from "../contexts/UserContext";
 import AppContext from "../contexts/AppContext";
 
+import { Link, useNavigate, useParams } from "react-router-dom";
+
 export default function UserProfile() {
+  const navigate = useNavigate();
+
   const { theUser } = useContext(UserContext);
   const { requests, fetchRequests } = useContext(AppContext);
 
@@ -29,12 +33,19 @@ export default function UserProfile() {
     );
   });
 
+  if (!theUser) {
+    console.log("no User");
+    navigate("/");
+  }
+
   return (
     <div>
       {theUser && (
         <div>
           <h1>Profile</h1>
           <h3>{theUser.email}</h3>
+          <br />
+          <h2>My tasks</h2>
           {thisUserRequestsHTML}
         </div>
       )}

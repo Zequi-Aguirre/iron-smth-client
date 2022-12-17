@@ -35,7 +35,7 @@ export default function SignupOrLogin({ action }) {
       .then((response) => {
         // console.log(response);
         getUserInfo();
-        navigate("/profile");
+        // navigate("/profile");
       })
       .catch((err) => {
         console.log(err);

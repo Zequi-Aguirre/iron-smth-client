@@ -1,11 +1,15 @@
 import "../App.css";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import React, { useContext } from "react";
 import AppContext from "../contexts/AppContext";
+import UserContext from "../contexts/UserContext";
+import AddUser from "./addUser";
+import UserPreview from "./userPreview";
 
 export default function AllUsers() {
   const { users, fetchUsers, deleteUser } = useContext(AppContext);
+  const { theUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -13,27 +17,19 @@ export default function AllUsers() {
     fetchUsers();
   }, []);
 
+  if (!theUser) {
+    console.log("no User");
+    navigate("/");
+  } else if (theUser.userType !== "Owner") {
+    console.log("no Access for you");
+    navigate("/");
+  }
+
   console.log(users);
 
   const usersHTML = users.map((user) => {
     console.log(user.email);
-    return (
-      <div key={user._id}>
-        <h3>{user.email}</h3>
-        <h3>{user._id}</h3>
-        {user.userType !== "Owner" && (
-          <button
-            onClick={() => {
-              deleteUser(user._id);
-              fetchUsers();
-              // navigate("/users");
-            }}
-          >
-            Delete User
-          </button>
-        )}
-      </div>
-    );
+    return <UserPreview user={user} />;
   });
 
   console.log(users);
@@ -41,6 +37,7 @@ export default function AllUsers() {
   return (
     <div>
       <h1>All Users</h1>
+      <AddUser />
       {usersHTML}
     </div>
   );

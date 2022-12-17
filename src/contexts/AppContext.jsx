@@ -48,6 +48,43 @@ export const AppProps = ({ children }) => {
       });
   };
 
+  const submitAddFromFUB = (formState) => {
+    console.log("formState");
+    console.log({ formState });
+
+    axios
+      .post("http://localhost:5005/property/create-from-fub", {
+        leadID: formState.leadID,
+      })
+      .then((response) => {
+        console.log("{ response }");
+        console.log({ response });
+        fetchProperties();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const updatePropertyInfo = (formState) => {
+    console.log("formState");
+    console.log({ formState });
+    axios
+      .post("http://localhost:5005/property/update", {
+        propertyID: formState.propertyID,
+        name: formState.name,
+        address: formState.address,
+      })
+      .then((response) => {
+        console.log("{ response }");
+        console.log({ response });
+        fetchProperties();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const deleteProperty = (propertyId) => {
     axios
       .post("http://localhost:5005/property/delete/" + propertyId)
@@ -94,11 +131,33 @@ export const AppProps = ({ children }) => {
       });
   };
 
+  const editRequest = (formState) => {
+    console.log(formState);
+    axios
+      .post("http://localhost:5005/request/edit", {
+        requestID: formState.requestID,
+        property: formState.property,
+        description: formState.description,
+        dueDate: formState.dueDate,
+        assignedTo: formState.assignedTo,
+        status: formState.status,
+      })
+      .then((response) => {
+        console.log({ response });
+        // fetchProperties();
+        fetchRequests();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const deleteRequest = (requestId) => {
     axios
       .post("http://localhost:5005/request/delete/" + requestId)
       .then((response) => {
         console.log(response);
+        fetchRequests();
       })
       .catch((err) => {
         console.log(err);
@@ -134,6 +193,20 @@ export const AppProps = ({ children }) => {
 
   // -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=- USER PROPS -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-
 
+  // -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=- EDITING PROPS -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-
+
+  const [editing, setEditing] = useState(false);
+
+  const edit = () => {
+    setEditing(true);
+  };
+
+  const stopEditing = () => {
+    setEditing(false);
+  };
+
+  // -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=- EDITING PROPS -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-
+
   return (
     // which states/functions we want as global variables. you have to pass the value in order for it to be available.
     <AppContext.Provider
@@ -142,13 +215,19 @@ export const AppProps = ({ children }) => {
         fetchProperties,
         sendPropertyInfo,
         deleteProperty,
+        updatePropertyInfo,
+        submitAddFromFUB,
         requests,
         fetchRequests,
         sendRequestInfo,
         deleteRequest,
+        editRequest,
         users,
         fetchUsers,
         deleteUser,
+        editing,
+        edit,
+        stopEditing,
       }}
     >
       {children}
